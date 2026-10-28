@@ -1,0 +1,40 @@
+/* Fonts, colours and type scale. Change the look of the whole site here. */
+
+/* Both fonts are self-hosted (SIL Open Font License), so the page loads no third-party font service. */
+@font-face{font-family:"Young Serif";src:url("../assets/fonts/young-serif-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Hanken Grotesk";src:url("../assets/fonts/hanken-grotesk-var.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Hanken Grotesk";src:url("../assets/fonts/hanken-grotesk-var-italic.woff2") format("woff2");font-weight:100 900;font-style:italic;font-display:swap}
+
+:root{
+  --paper:#F1EEEE;      /* page: white shirt, with a faint garnet bias */
+  --paper-2:#E7E2E2;
+  --ink:#1B1718;        /* black jacket */
+  --ink-2:#463D3F;      /* secondary text */
+  --muted:#6B6163;      /* captions */
+  --rule:#D6CECF;       /* hairlines */
+  --accent:#8A1C2B;     /* garnet, text and marks */
+  --panel:#8A1C2B;      /* garnet, portrait panel */
+  --on-panel:#F7F2F1;
+  --tint:rgba(138,28,43,.06);
+
+  --f-display:"Young Serif",Georgia,"Times New Roman",serif;
+  --f-body:"Hanken Grotesk","Helvetica Neue",Arial,sans-serif;
+  --t-xs:.8125rem; --t-sm:.9375rem; --t-md:1.0625rem; --t-lg:1.1875rem;
+  --t-xl:clamp(1.55rem,1.1rem + 1.5vw,2.1rem);
+  --t-2xl:clamp(2rem,1.25rem + 2.8vw,3.1rem);
+  --t-hero:clamp(2.9rem,1.35rem + 5.6vw,5.6rem);
+  --measure:62ch;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#151213; --paper-2:#1E1A1B; --ink:#F2ECEB; --ink-2:#D3CACB; --muted:#A39A9C;
+    --rule:#373032; --accent:#E7808B; --panel:#7A1826; --on-panel:#F7F2F1; --tint:rgba(231,128,139,.08);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#151213; --paper-2:#1E1A1B; --ink:#F2ECEB; --ink-2:#D3CACB; --muted:#A39A9C;
+  --rule:#373032; --accent:#E7808B; --panel:#7A1826; --on-panel:#F7F2F1; --tint:rgba(231,128,139,.08);
+  color-scheme:dark;
+}

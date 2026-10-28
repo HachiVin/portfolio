@@ -1,0 +1,57 @@
+/* Reset, typography and the parts every page shares: header, buttons, links, toast. */
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+html.locked{overflow:hidden}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font:400 var(--t-md)/1.6 var(--f-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--paper)}
+img{max-width:100%;display:block}
+[hidden]{display:none!important}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1160px;margin-inline:auto}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;text-wrap:balance;margin:0}
+h4{margin:0}
+p{margin:0}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* Header: Home first, then the sections; the theme switch sits on the right. */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1px solid transparent;transition:border-color .2s}
+.top.scrolled{border-bottom-color:var(--rule)}
+.top-in{display:flex;align-items:center;gap:26px;height:62px}
+.top nav{display:flex;gap:26px;margin-right:auto}
+.top nav a{position:relative;display:inline-flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink-2);font-size:var(--t-sm);font-weight:500;padding-block:8px;transition:color .2s}
+.top nav a::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.top nav a:hover,.top nav a[aria-current="true"]{color:var(--accent)}
+.top nav a:hover::after,.top nav a[aria-current="true"]::after{transform:scaleX(1)}
+.top nav .home::before{content:"";width:8px;height:8px;background:var(--accent);transition:transform .4s var(--ease)}
+.top nav .home:hover::before{transform:rotate(90deg)}
+.progress{position:absolute;left:-16px;right:-16px;bottom:-1px;height:2px;background:var(--accent);transform:scaleX(var(--p,0));transform-origin:left;pointer-events:none}
+.theme{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--rule);border-radius:50%;background:transparent;color:var(--ink);cursor:pointer;transition:border-color .2s,transform .4s var(--ease)}
+.theme:hover{border-color:var(--ink);transform:rotate(180deg)}
+@media (max-width:860px){.top nav a:not(.keep){display:none}.top-in,.top nav{gap:20px}}
+
+/* Buttons and links */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 22px;
+  font:600 var(--t-sm)/1 var(--f-body);letter-spacing:.01em;text-decoration:none;cursor:pointer;
+  background:var(--ink);color:var(--paper);border:1px solid var(--ink);border-radius:2px;transition:background .2s,color .2s,border-color .2s,transform .2s}
+.btn:hover{background:var(--accent);border-color:var(--accent);color:var(--on-panel)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent);background:transparent}
+.btn.small{min-height:40px;padding:0 16px}
+.btn .arr{transition:transform .25s var(--ease)}
+.btn:hover .arr{transform:translate(2px,-2px)}
+.text-link{background:none;border:0;padding:0;font:600 var(--t-sm)/1.2 var(--f-body);color:var(--ink);cursor:pointer;text-decoration:none;
+  background-image:linear-gradient(currentColor,currentColor);background-size:100% 1px;background-position:0 100%;background-repeat:no-repeat;padding-bottom:4px;transition:color .2s,background-size .3s var(--ease)}
+.text-link:hover{color:var(--accent);background-size:0 1px;background-position:100% 100%}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:40;
+  max-width:calc(100% - 32px);padding:11px 16px;background:var(--ink);color:var(--paper);font-size:var(--t-sm);border-radius:2px}

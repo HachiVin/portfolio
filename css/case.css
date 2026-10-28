@@ -1,0 +1,27 @@
+/* Case study side sheet (a native <dialog>). Its content comes from the <template>s in index.html. */
+
+.case{position:fixed;inset:0 0 0 auto;margin:0;height:100dvh;max-height:100dvh;width:min(740px,100%);max-width:100%;padding:0;border:0;border-left:1px solid var(--rule);background:var(--paper);color:var(--ink);overflow:auto}
+.case::backdrop{background:color-mix(in srgb,var(--ink) 42%,transparent)}
+.case[open]{animation:sheet .35s var(--ease)}
+.case[open]::backdrop{animation:fade .35s ease-out}
+@keyframes sheet{from{transform:translateX(40px);opacity:0}}
+@keyframes fade{from{opacity:0}}
+.case-bar{position:sticky;top:0;z-index:1;display:flex;justify-content:flex-end;background:var(--paper);border-bottom:1px solid var(--rule);
+  padding:calc(14px + env(safe-area-inset-top,0px)) calc(clamp(20px,4vw,48px) + env(safe-area-inset-right,0px)) 14px clamp(20px,4vw,48px)}
+.case-body{padding:30px calc(clamp(20px,4vw,48px) + env(safe-area-inset-right,0px)) calc(56px + env(safe-area-inset-bottom,0px)) clamp(20px,4vw,48px)}
+.case-body h2{font-size:var(--t-2xl);line-height:1.08}
+.case-body .sub{color:var(--muted);margin-top:10px;font-size:var(--t-sm)}
+.case-body h3{font-family:var(--f-body);font-size:var(--t-md);font-weight:600;margin-top:30px;padding-top:20px;border-top:1px solid var(--rule)}
+.case-body p,.case-body li{color:var(--ink-2);max-width:var(--measure)}
+.case-body p{margin-top:10px}
+.case-body ul{margin:10px 0 0;padding-left:1.1em}
+.case-body li{margin-top:8px}
+.case-body li::marker{color:var(--accent)}
+.tbl{overflow-x:auto;margin-top:14px}
+.tbl table{border-collapse:collapse;min-width:100%;font-size:var(--t-sm);font-variant-numeric:tabular-nums}
+.tbl th,.tbl td{text-align:left;padding:9px 18px 9px 0;border-bottom:1px solid var(--rule);white-space:nowrap}
+.tbl th{font-weight:600;color:var(--ink)}
+.tbl td{color:var(--ink-2)}
+.tbl .best{color:var(--ink);font-weight:600}
+.case-body .caption{font-size:var(--t-xs);color:var(--muted)}
+.case-links{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;margin-top:34px;padding-top:24px;border-top:1px solid var(--rule)}
