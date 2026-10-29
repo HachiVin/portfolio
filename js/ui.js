@@ -74,7 +74,11 @@
       entries.forEach(en => {
         if (!en.isIntersecting) return;
         navLinks.forEach(a => {
-          if (a.getAttribute("href") === "#" + en.target.id) a.setAttribute("aria-current", "true");
+          if (a.getAttribute("href") === "#" + en.target.id) {
+            a.setAttribute("aria-current", "true");
+            const nav = a.parentElement;   /* keep the current section visible in the sideways-scrolling bar on phones */
+            if (nav.scrollWidth > nav.clientWidth) nav.scrollTo({ left: a.offsetLeft - nav.offsetLeft - 16, behavior: "smooth" });
+          }
           else a.removeAttribute("aria-current");
         });
       });
