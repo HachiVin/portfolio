@@ -79,7 +79,6 @@
 .timeline h4{font-size:var(--t-md);font-weight:600;line-height:1.35}
 .timeline p{color:var(--ink-2);margin-top:4px;max-width:var(--measure)}
 .t-links{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:12px}
-.t-links:not(:has(a:not([hidden]))){display:none}
 .t-links .text-link{display:inline-flex;align-items:center;gap:6px}
 .t-links svg{transition:transform .25s var(--ease)}
 .t-links .text-link:hover svg{transform:translate(2px,-2px)}

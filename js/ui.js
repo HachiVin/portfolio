@@ -31,11 +31,18 @@
     } catch (e) { selectEmail(); }
   }));
 
-  /* CV button appears only when the PDF exists next to the page */
+  /* CV button: always shown. It hides itself only when the server answers that the PDF is missing (404).
+     Opened as a local file (double-click), the check cannot run, so the button simply stays. */
   const cvLink = $("#cv-link");
-  if (cvLink && SITE.cv) {
-    cvLink.href = SITE.cv;
-    fetch(SITE.cv, { method: "HEAD" }).then(r => { if (r.ok) cvLink.hidden = false; }).catch(() => {});
+  if (cvLink) {
+    if (!SITE.cv) cvLink.hidden = true;
+    else {
+      cvLink.href = SITE.cv;
+      cvLink.hidden = false;
+      if (location.protocol.indexOf("http") === 0) {
+        fetch(SITE.cv, { method: "HEAD" }).then(r => { if (r.status === 404) cvLink.hidden = true; }).catch(() => {});
+      }
+    }
   }
 
   /* Internship project links: each [data-work] row shows only the buttons whose link is set in js/config.js */
