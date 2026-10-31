@@ -91,12 +91,12 @@
         <p class="p-desc">Tells a bank's customer-experience team which app reviews to read today. Each Indonesian BRImo review gets a complaint aspect, a sentiment and an urgency level, shown on a live dashboard with an agent that answers data questions in plain Indonesian.</p>
         <div class="figs">
           <div class="fig"><span class="fig-num">39% → 21%</span><span class="fig-cap">reviews that need a manual check</span></div>
-          <div class="fig"><span class="fig-num">0.853</span><span class="fig-cap">urgency macro-F1, against 0.805 for TF-IDF</span></div>
+          <div class="fig"><span class="fig-num">0.804</span><span class="fig-cap">urgency macro-F1 on 398 human-labelled reviews, against 0.779 for TF-IDF</span></div>
           <div class="fig"><span class="fig-num">52,098</span><span class="fig-cap">real reviews in the database</span></div>
         </div>
         <div class="stages">
           <ol aria-label="Stages this project covers">
-            <li class="on" tabindex="0" data-detail="52,098 public BRImo reviews. Urgency labels from a written two-question SOP, keyword rules and an LLM cross-check.">Data</li>
+            <li class="on" tabindex="0" data-detail="52,098 public BRImo reviews. Urgency follows a written two-question SOP: training labels from keyword rules cross-checked by an LLM, test labels from 400 reviews I labelled blind.">Data</li>
             <li class="on" tabindex="0" data-detail="Multi-task IndoBERT: one shared encoder, three heads for aspect, sentiment and urgency.">Model</li>
             <li class="on" tabindex="0" data-detail="FastAPI on PostgreSQL, plus a LangGraph text-to-SQL agent behind a read-only guard.">API</li>
             <li class="on" tabindex="0" data-detail="Docker image with the model baked in, so a cold start does not download it again.">Container</li>
@@ -370,6 +370,7 @@
   <ul>
     <li>A multi-task IndoBERT with one shared encoder and three heads for aspect, sentiment and urgency, trained in about nine minutes on a T4 GPU.</li>
     <li>Urgency labels from a two-question SOP: is the customer's money or account affected (critical), or can they not use the app at all (high)? Keyword rules and an LLM second opinion labelled the training data, and reviews where they disagreed were left out.</li>
+    <li>A human-verified test set: I labelled 400 test-period reviews blind, seeing only the text, date and app version, with no rule guess, LLM label or rating. The LLM's earlier labels matched mine 79.5% of the time (Cohen's kappa 0.647).</li>
     <li>A time-based split. The newest 15% of reviews is the test set, so the model is judged on reviews written after the ones it learned from.</li>
     <li>A FastAPI dashboard on PostgreSQL with a triage queue, weekly trends and a breakdown per app version.</li>
     <li>A LangGraph agent that turns questions in plain Indonesian into read-only SQL, shows the query it ran and logs every run.</li>
@@ -377,19 +378,21 @@
   <h3>Results</h3>
   <div class="tbl">
     <table>
-      <thead><tr><th>Model</th><th>Aspect</th><th>Sentiment</th><th>Urgency</th><th>Needs review</th><th>Latency p50</th></tr></thead>
+      <thead><tr><th>Model</th><th>Aspect</th><th>Sentiment</th><th>Urgency</th><th>Critical recall</th><th>Needs review</th><th>Latency p50</th></tr></thead>
       <tbody>
-        <tr><td>Keyword rules</td><td>–</td><td>–</td><td>0.637</td><td>–</td><td>–</td></tr>
-        <tr><td>TF-IDF + logistic regression</td><td>0.591</td><td>0.652</td><td>0.805</td><td>39.2%</td><td>6.9 ms</td></tr>
-        <tr><td>Multi-task IndoBERT</td><td class="best">0.612</td><td class="best">0.687</td><td class="best">0.853</td><td class="best">21.3%</td><td>111 ms</td></tr>
+        <tr><td>Keyword rules</td><td>–</td><td>–</td><td>0.636</td><td>0.750</td><td>–</td><td>–</td></tr>
+        <tr><td>TF-IDF + logistic regression</td><td>0.592</td><td>0.652</td><td>0.779</td><td>0.889</td><td>39.0%</td><td>6.9 ms</td></tr>
+        <tr><td>Multi-task IndoBERT</td><td class="best">0.612</td><td class="best">0.687</td><td class="best">0.804</td><td>0.889</td><td class="best">21.3%</td><td>111 ms</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="caption">Macro-F1 on 7,814 test reviews. Urgency is scored against silver labels. Latency is per review on CPU.</p>
+  <p class="caption">Macro-F1 on 7,814 test reviews. Urgency and critical recall are scored on 398 reviews I labelled by hand (72 critical). Latency is per review on CPU.</p>
+  <p>Against the earlier LLM labels IndoBERT scored 0.853 and a perfect critical recall on 11 reviews. Graded by a person on a larger set, it drops to 0.804 and 0.889: still ahead of TF-IDF, by a smaller margin.</p>
   <p>The agent answered 4 of 5 questions correctly on a small smoke test with known answers.</p>
   <h3>Limits and next steps</h3>
   <ul>
-    <li>The urgency labels are silver: made by rules and an LLM, not yet checked by a person. Human review of the test set is planned for the next version.</li>
+    <li>Both models miss 8 of the 72 critical reviews, so the decision threshold needs tuning.</li>
+    <li>The training labels are still silver (rules and an LLM), and the test labels come from one annotator. A second labelling pass to measure my own consistency is next.</li>
     <li>On all 52,098 reviews, IndoBERT flags more reviews as critical than the rules do (5.5% against 1.0%), so the threshold needs tuning.</li>
     <li>IndoBERT is about 15 times slower than the baseline, so large backfills run in batch on a GPU.</li>
   </ul>
